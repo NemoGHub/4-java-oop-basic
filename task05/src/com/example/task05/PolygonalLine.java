@@ -1,20 +1,24 @@
 package com.example.task05;
 
 import javax.sound.sampled.Line;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Ломаная линия
  */
 public class PolygonalLine {
 
-    private Point[] points;
+    private final List<Point> points = new LinkedList<>();
     /**
      * Устанавливает точки ломаной линии
      *
      * @param points массив точек, которыми нужно проинициализировать ломаную линию
      */
     public void setPoints(Point[] points) {
-        this.points = points;
+        for (Point point : points) {
+            this.points.add(point.clone());
+        }
     }
 
     /**
@@ -23,11 +27,7 @@ public class PolygonalLine {
      * @param point точка, которую нужно добавить к ломаной
      */
     public void addPoint(Point point) {
-        Point[] newPoints = new Point[points.length + 1];
-        for (int i = 0; i< points.length; i++){
-            newPoints[i] = points[i];
-        }
-        newPoints[points.length + 1] = point;
+        points.add(point.clone());
     }
 
     /**
@@ -37,8 +37,7 @@ public class PolygonalLine {
      * @param y координата по оси ординат
      */
     public void addPoint(double x, double y) {
-        Point p = new Point(x,y);
-        addPoint(p);
+        points.add( new Point(x,y));
     }
 
     /**
@@ -48,12 +47,11 @@ public class PolygonalLine {
      */
     public double getLength() {
         double length = 0;
-        if (points.length > 1){
-            for (int i = 1; i < points.length; i++) {
-                length += points[i].getLength(points[i-1]);
+        if (points.size() > 1){
+            for (int i = 1; i < points.size(); i++) {
+                length += points.get(i).getLength(points.get(i - 1));
             }
         }
         return length;
     }
-
 }
